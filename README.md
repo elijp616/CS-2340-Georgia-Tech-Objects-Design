@@ -1,4 +1,4 @@
-# CS-2340-Georgia-Tech-Objects-Design
+# CS-2340-Georgia-Tech-Objects and Design
 
 Worked within a group to create an adventure game called Spacetrader. Created in Python Flask. Individually worked on user interface and combat systems.
 
