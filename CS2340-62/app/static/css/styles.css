@@ -1,0 +1,55 @@
+@charset "UTF-8";
+.column {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 300px;
+  padding-top: 20px;
+}
+
+.row {
+  flex: 25%;
+  padding-bottom: 10px;
+}
+
+.main {
+  display: flex;
+  width: 85%;
+}
+
+.universeMap {
+  width: 700px;
+  height: 700px;
+  border-style: double;
+  border-radius: 5px;
+  margin: auto;
+  position: relative;
+  padding-right: 5px;
+}
+
+.info {
+  margin-left: auto;
+  flex: 25%
+}
+.region {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  font-size: 10pt;
+  color: green;
+  border-radius: 100%;
+  display: inline-block;
+}
+
+.radioLabel {
+  position: absolute;
+}
+
+table {
+  width: 300px;
+  border-radius: 5px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}

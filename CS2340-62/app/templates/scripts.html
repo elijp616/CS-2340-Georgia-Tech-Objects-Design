@@ -1,0 +1,216 @@
+<script type="text/javascript">
+        var xCenter;
+        var yCenter;
+        var regions = {{ universe | region_list | tojson }};
+        var ship_cargo = {{ ship | item_list | tojson }};
+        var market_cargo = {{ market | item_list | tojson }};
+        var fuelCost = "";
+        // function setupMarket() {
+        //     console.log("market being set up");
+        //     console.log("market cargo is: " + market_cargo[0]["name"]);
+        //     {#console.log("market tech level is: " + {{ market.get_tech_level() }});#}
+        //     var table = document.createElement("table");
+        //     var titleRow = document.createElement("tr");
+        //     var titleCard = document.createElement("th");
+        //     titleCard.setAttribute("colspan", "4");
+        //     titleCard.innerHTML = "Market Information";
+        //     titleRow.appendChild(titleCard);
+        //     table.appendChild(titleRow);
+        //     var headerRow = document.createElement("tr");
+        //     var nameHead = document.createElement("th");
+        //     var cargoHead = document.createElement("th");
+        //     var priceHead = document.createElement("th");
+        //     nameHead.innerHTML = "Name";
+        //     cargoHead.innerHTML = "Cargo space";
+        //     priceHead.innerHTML = "Price";
+        //     headerRow.appendChild(nameHead);
+        //     headerRow.appendChild(cargoHead);
+        //     headerRow.appendChild(priceHead);
+        //     table.appendChild(headerRow);
+        //     market_cargo.forEach(function (element) {
+        //         var row = document.createElement("tr");
+        //         var name_data = document.createElement("td");
+        //         var cargo_data = document.createElement("td");
+        //         var price_data = document.createElement("td");
+        //         var buy_button = document.createElement("button");
+        //         cargo_data.setAttribute("id", element["name"] + "_cargo");
+        //         buy_button.setAttribute("type", "button");
+        //         buy_button.setAttribute("id", "buy_item_input");
+        //         buy_button.setAttribute("name", "");
+        //         buy_button.setAttribute("onClick", "buyItem('" + element["name"] + "')");
+        //         buy_button.setAttribute("value", "Buy");
+        //         name_data.innerHTML = element["name"];
+        //         cargo_data.innerHTML = element["cargo"];
+        //         price_data.innerHTML = element["price"];
+        //         buy_button.innerHTML = "Buy"
+        //         row.appendChild(name_data);
+        //         row.appendChild(cargo_data);
+        //         row.appendChild(price_data);
+        //         row.appendChild(buy_button);
+        //         table.appendChild(row);
+        //     });
+        //     console.log("table???: " + table);
+        //     document.getElementById("marketTable").appendChild(table);
+        //     console.log("region user is : " + market_cargo)
+        // }
+        function buyItem(name) {
+            var form = document.getElementById("buy_item");
+            var input = document.getElementById("buy_input");
+            if(name == "fuel") {
+                input.value = "fuel";
+                form.submit();
+            }
+            market_cargo.forEach(function(element) {
+                if(element["name"] == name) {
+                        input.value = element["name"];
+                        console.log("Input" + input.value);
+                        form.submit();
+                }
+            });
+        }
+
+        function sellItem(name) {
+            var form = document.getElementById("sell_item");
+            var input = document.getElementById("sell_input");
+            market_cargo.forEach(function(element) {
+                if(element["name"] == name) {
+                        input.value = element["name"];
+                        console.log("Input" + input.value);
+                        form.submit();
+                }
+            });
+        }
+        function setupInventory() {
+            console.log("inventory being set up");
+            var table = document.createElement("table");
+            var titleRow = document.createElement("tr");
+            var titleCard = document.createElement("th");
+            titleCard.setAttribute("colspan", "4");
+            titleCard.innerHTML = "Inventory Information";
+            titleRow.appendChild(titleCard);
+            table.appendChild(titleRow);
+            var headerRow = document.createElement("tr");
+            var nameHead = document.createElement("th");
+            var cargoHead = document.createElement("th");
+            var priceHead = document.createElement("th");
+            nameHead.innerHTML = "Name";
+            cargoHead.innerHTML = "Cargo space";
+            priceHead.innerHTML = "Price";
+            headerRow.appendChild(nameHead);
+            headerRow.appendChild(cargoHead);
+            headerRow.appendChild(priceHead);
+            table.appendChild(headerRow);
+            ship_cargo.forEach(function (element) {
+                var row = document.createElement("tr");
+                var name_data = document.createElement("td");
+                var cargo_data = document.createElement("td");
+                var price_data = document.createElement("td");
+                var sell_button = document.createElement("button")
+                cargo_data.setAttribute("id", element["name"] + "_cargo");
+                price_data.setAttribute("id", element["name"]+ "_price");
+                name_data.innerHTML = element["name"];
+                cargo_data.innerHTML = element["cargo"];
+                price_data.innerHTML = element["price"];
+                sell_button.setAttribute("onClick", "sellItem('" + element["name"] + "')");
+                sell_button.innerHTML = "Sell"
+                row.appendChild(name_data);
+                row.appendChild(cargo_data);
+                row.appendChild(price_data);
+                row.appendChild(sell_button);
+
+                table.appendChild(row);
+            });
+            document.getElementById("inventoryTable").appendChild(table);
+        }
+
+        function setUpMap() {
+            console.log("map being set up");
+            setCenter();
+            regions.forEach(function (element) {
+                xPos = .95 * (element["x"] * (xCenter / 200)) + xCenter;
+                yPos = -.95 * (element["y"] * (yCenter / 200)) + yCenter;
+                var tmp = document.createElement("Input");
+                var label = document.createElement("LABEL")
+                if ("{{ user.get_region().get_name() }}" == element["name"]) {
+                    tmp.setAttribute("checked", true);
+                }
+                tmp.setAttribute("type", "radio");
+                tmp.setAttribute("name", "region")
+                tmp.setAttribute("class", "region");
+                tmp.setAttribute("id", element["name"]);
+                tmp.setAttribute("value", element["name"]);
+                tmp.setAttribute("onClick", "checkRegion(id)");
+                label.setAttribute("htmlFor", element["name"]);
+                label.setAttribute("class", "radioLabel");
+                label.appendChild(document.createTextNode(element["name"]));
+                document.getElementById("universeMap").appendChild(tmp);
+                document.getElementById("universeMap").appendChild(label);
+                tmp.style.left = String(xPos) + "px";
+                tmp.style.top = String(yPos) + "px";
+                label.style.left = String(xPos + 5) + "px";
+                label.style.top = String(yPos + 20) + "px";
+            });
+            var centerPlus = document.createElement("Strong");
+            document.getElementById("universeMap").appendChild(centerPlus);
+            centerPlus.innerHTML = "+";
+            centerPlus.style.position = "absolute";
+            centerPlus.style.left = String(xCenter) + "px";
+            centerPlus.style.top = String(yCenter) + "px";
+            //setupMarket();
+            //setupInventory();
+        }
+        function setCenter() {
+            xCenter = document.getElementById("universeMap").clientWidth / 2;
+            yCenter = document.getElementById("universeMap").clientHeight / 2;
+        }
+        function distanceXY(x2, x1, y2, y1) {
+            return Math.pow(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2), (1 / 2));
+        }
+        function checkRegion(name) {
+            var infoName = document.getElementById("infoName");
+            var cords = document.getElementById("infoCords");
+            var techLevel = document.getElementById("infoTechLevel");
+            var fuelCostDoc = document.getElementById("fuelCost");
+            var distanceTravel = document.getElementById("distanceTravel");
+            var region = null;
+            regions.forEach(function (element) {
+                if (element["name"] === name) {
+                    console.log(name);
+                    region = element;
+                }
+            });
+            name = region["name"];
+            x = region["x"];
+            y = region["y"];
+            regionTechLevel = region["techLevel"];
+            infoName.innerHTML = name;
+            cords.innerHTML = "[" + x + ", " + y + "]"
+            techLevel.innerHTML = "Tech Level: " + regionTechLevel;
+            // Add fuel cost display
+            var difficulty = "{{ game.get_difficulty() }}";
+            var difficulty_multiplier = 0;
+            var pilot_skill = {{ user.get_pilot_skill() }};
+            var userX = {{ user.get_region().get_x() }};
+            var userY = {{ user.get_region().get_y() }};
+            var distance = distanceXY(userX, x, userY, y);
+            distanceTravel.innerHTML = Math.round(distance);
+            console.log("DIST HERE IS: " + distance);
+            if (difficulty === "easy") {
+                difficulty_multiplier = (1 - (.05 * pilot_skill) + .2)
+            } else if (difficulty === "medium") {
+                difficulty_multiplier = (1 - (.05 * pilot_skill) + .4)
+            } else if (difficulty === "hard") {
+                difficulty_multiplier = (1 - (.05 * pilot_skill) + .7)
+            }
+            var fuel_cost = Math.round(difficulty_multiplier * distance);
+            fuelCostDoc.innerHTML = fuel_cost;
+            //console.log("fffufueeel: " + fuel_cost);
+            fuelCost = fuel_cost;
+            //console.log("wowow!" + fuelCost);
+            document.getElementById("fuel_cost_input").value = fuelCost;
+        }
+
+        function presentNPCEncounter() {
+
+        }
+    </script>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+
+<script type="text/javascript">
+    pSkill = 0;
+    fSkill = 0;
+    mSkill = 0;
+    eSkill = 0;
+    maxPoints = 0;
+    currentPoints = 0;
+
+    function start() {
+        document.getElementById("pSkill").innerHTML = pSkill;
+        document.getElementById("fSkill").innerHTML = fSkill;
+        document.getElementById("mSkill").innerHTML = mSkill;
+        document.getElementById("eSkill").innerHTML = eSkill;
+        updatePage();
+    }
+
+    function updatePage() {
+        difficulty = document.getElementById("difficulty").value;
+        maxPoints = 8;
+        if (difficulty == "easy") {
+            maxPoints = 16;
+        } else if (difficulty == "medium") {
+            maxPoints = 12;
+        }
+        currentPoints = pSkill + fSkill + mSkill + eSkill;
+        document.getElementById("pointsLeft").innerHTML = maxPoints - currentPoints;
+        updateForms();
+    }
+
+    function updateForms() {
+        document.getElementById("pilot_skill").value = pSkill;
+        document.getElementById("fighter_skill").value = fSkill;
+        document.getElementById("merchant_skill").value = mSkill;
+        document.getElementById("engineer_skill").value = eSkill;
+    }
+
+    function changePSkill(increase) {
+        if (currentPoints < maxPoints && increase) {
+            pSkill++;
+        } else if (pSkill > 0 && !increase) {
+            pSkill--;
+        }
+        updatePage();
+        document.getElementById("pSkill").innerHTML = pSkill;
+    }
+
+    function changeFSkill(increase) {
+        if (currentPoints < maxPoints && increase) {
+            fSkill++;
+        } else if (fSkill > 0 && !increase) {
+            fSkill--;
+        }
+        updatePage();
+        document.getElementById("fSkill").innerHTML = fSkill;
+    }
+
+    function changeMSkill(increase) {
+        if (currentPoints < maxPoints && increase) {
+            mSkill++;
+        } else if (mSkill > 0 && !increase) {
+            mSkill--;
+        }
+        updatePage();
+        document.getElementById("mSkill").innerHTML = mSkill;
+
+    }
+
+    function changeESkill(increase) {
+        if (currentPoints < maxPoints && increase) {
+            eSkill++;
+        } else if (eSkill > 0 && !increase) {
+            eSkill--;
+        }
+        updatePage();
+        document.getElementById("eSkill").innerHTML = eSkill;
+
+    }
+</script>
+
+
+<body id="mainBody" onload="start()">
+<div class="" , align='center'>
+    Please insert the following data!
+
+
+    <br>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }}
+        {{ form.name(size = 12) }}
+
+        <div class="column" align="center">
+            <div class="row" align="right">
+                {{ form.pilot_skill.label }}:
+                <button type="button" name="decreasePilotSkill" onclick="changePSkill(false)">-</button>
+                <strong id="pSkill"></strong>
+                <button type="button" name="increasePilotSkill" onclick="changePSkill(true)">+</button>
+            </div>
+            <div class="row" align="right">
+                {{ form.fighter_skill.label }}:
+                <button type="button" name="decreaseFighterSkill" onclick="changeFSkill(false)">-</button>
+                <strong id="fSkill"></strong>
+                <button type="button" name="increaseFighterSkill" onclick="changeFSkill(true)">+</button>
+            </div>
+            <div class="row" align="right">
+                {{ form.merchant_skill.label }}:
+                <button type="button" name="decreaseMerchantSkill" onclick="changeMSkill(false)">-</button>
+                <strong id="mSkill"></strong>
+                <button type="button" name="increaseMerchantSkill" onclick="changeMSkill(true)">+</button>
+            </div>
+            <div class="row" align="right">
+                {{ form.engineer_skill.label }}:
+                <button type="button" name="decreaseEngineerSkill" onclick="changeESkill(false)">-</button>
+                <strong id="eSkill"></strong>
+                <button type="button" name="increaseEngineerSkill" onclick="changeESkill(true)">+</button>
+            </div>
+            <!-- <div class="", align='center'>
+            {{ form.pilot_skill.label }}:  <button type="button" name="decreasePilotSkill" onclick="changePSkill(false)">-</button>
+            <strong id="pSkill"></strong>
+            <button type="button" name="increasePilotSkill" onclick="changePSkill(true)">+</button> <br>
+            {{ form.fighter_skill.label }}: <button type="button" name="decreaseFighterSkill" onclick="changeFSkill(false)">-</button>
+            <strong id="fSkill"></strong>
+            <button type="button" name="increaseFighterSkill" onclick="changeFSkill(true)">+</button> <br>
+            {{ form.merchant_skill.label }}: <button type="button" name="decreaseMerchantSkill" onclick="changeMSkill(false)">-</button>
+            <strong id="mSkill"></strong>
+            <button type="button" name="increaseMerchantSkill" onclick="changeMSkill(true)">+</button> <br>
+            {{ form.engineer_skill.label }}: <button type="button" name="decreaseEngineerSkill" onclick="changeESkill(false)">-</button>
+            <strong id="eSkill"></strong>
+            <button type="button" name="increaseEngineerSkill" onclick="changeESkill(true)">+</button> <br>
+
+          </div> -->
+        </div>
+        <div class="" align="center">
+
+
+            <p>
+                You have <strong id="pointsLeft"></strong> point(s) left.
+
+            </p>
+            {{ form.difficulty.label }} <br>
+            {{ form.difficulty(onChange="updatePage()") }} <br>
+
+            <br>
+
+            {{ form.submit() }}
+
+            <p>{{ flash_message }}</p>
+        </div>
+
+        {#        <button type="button" name="startGame" onclick="window.confirm('are you sure');">ConfirmTest</button>#}
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    {% include "scripts.html" %}
+</head>
+<body onload="setUpMap()" onreset="setUpMap()">
+<div class="main">
+    <form id="form" method="post">
+        <div class="universeMap" , id="universeMap" style="padding-right: 5px;"></div>
+        {% include 'newRegionInfo.html' %}
+        
+    </form>
+    <div id="encounter">
+        {% if encounter != "" %}
+            {% include 'npcEncounter.html' %}
+        {% endif %}
+    </div>
+    <div class="info" , align="left">
+        <div class="info">
+            {% include 'playerInfo.html' %}
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

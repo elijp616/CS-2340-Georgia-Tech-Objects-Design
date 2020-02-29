@@ -1,0 +1,132 @@
+<table>
+    <tr>
+        <td>Name:</td>
+        <td>{{ user.get_name() }}</td>
+    </tr>
+    <tr>
+        <td>Credits:</td>
+        <td>{{ user.get_credits() }}</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Skill</th>
+        <th>Experience</th>
+    </tr>
+    <tr>
+        <td>Pilot</td>
+        <td>{{ user.get_pilot_skill() }}</td>
+    </tr>
+    <tr>
+        <td>Fighter</td>
+        <td>{{ user.get_fighter_skill() }}</td>
+    </tr>
+    <tr>
+        <td>Merchant</td>
+        <td>{{ user.get_merchant_skill() }}</td>
+    </tr>
+    <tr>
+        <td>Engineer</td>
+        <td>{{ user.get_engineer_skill() }}</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th colspan="2">Current Region Information</th>
+    </tr>
+    <tr>
+        <td>Region Name</td>
+        <td>{{ user.get_region().get_name() }}</td>
+    </tr>
+    <tr>
+        <td>Tech Level</td>
+        <td>{{ user.get_region().get_tech_level().name }}</td>
+    </tr>
+    <tr>
+        <td>Coordinates</td>
+        <td>[{{ user.get_region().get_x() }}, {{ user.get_region().get_y() }}]</td>
+    </tr>
+</table>
+
+<form id="buy_item", name="buy" method="POST">
+    <input type="hidden" id="buy_input" name="buy" value="">
+    <div class="marketTable" id="marketTable">
+        <table>
+            <tr><th colspan="4">Market Information</th></tr>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        {% for item in market.get_current_cargo() %}
+            <tr>
+                <td id="{{item.get_name() }}">{{ item.get_name() }}</td>
+                <td>{{ item.get_cargo_space() }}</td>
+                <td>{{ item.get_price() }}</td>
+                <td>
+                    <button id="buy_item_button" onclick="buyItem('{{ item.get_name() }}')">Buy</button>
+
+                </td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td>Fuel</td>
+                <td>{{ ship.get_fuel_cap() - ship.get_current_fuel() }}</td>
+                <td id="fuelCost">{{ ((16 - user.get_merchant_skill() | int) / 16) * (ship.get_fuel_cap() - ship.get_current_fuel()) }}</td>
+                <td>
+                    <button id="buy_item_button" onclick="buyItem('fuel')">Refuel</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+<form method="post" id="sell_item" name = "sell">
+    <input type="hidden" id = "sell_input" name="sell">
+    <div class="inventoryTable" id="inventoryTable">
+         <table>
+            <tr><th colspan="4">Inventory Information</th></tr>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        {% for item in ship.get_current_cargo() %}
+            <tr>
+                <td id="{{item.get_name() }}">{{ item.get_name() }}</td>
+                <td>{{ item.get_cargo_space() }}</td>
+                <td>{{ item.get_price() }}</td>
+                <td>
+                    <button id="buy_item_button" onclick="sellItem('{{ item.get_name() }}')">Sell</button>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</form>
+
+<table>
+    <tr>
+        <th colspan="2">Ship Information</th>
+    </tr>
+    <tr>
+        <td>Type:</td>
+        <td>{{ user.get_ship().get_type() }}</td>
+    </tr>
+    <tr>
+        <td>Cargo:</td>
+        <td>{{ user.get_ship().get_capacity() }} / {{ user.get_ship().get_max_cargo() }}</td>
+    </tr>
+    <tr>
+        <td>Fuel:</td>
+        <td>{{ user.get_ship().get_current_fuel() }} / {{ user.get_ship().get_fuel_cap() }}</td>
+    </tr>
+    <tr>
+        <td>Health:</td>
+        <td>{{ user.get_ship().get_current_health() }} / {{ user.get_ship().get_max_health() }}</td>
+    </tr>
+</table>

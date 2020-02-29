@@ -1,0 +1,36 @@
+<table>
+    <tr>
+        <th colspan="0">{{ encounter }} Encounter!</th>
+    </tr>
+    <form action="" method="POST" name = "action">
+    <tr>
+        <td>
+            <input type="submit" name = "submit" value="Fight">
+        </td>
+        <td> 
+            {% if encounter != 'trader' %}
+                <input type="submit" name = "submit" value="Flee">
+            {% else %}
+                <input type="submit" name = "submit" value="Buy">
+                <input type="submit" name = "submit" value="Negotiate">
+            {% endif %}
+        </td>
+        <td>
+            {% if encounter == 'police' %}
+                <input type="submit" name="submit" value="Forfeit">
+            {% elif encounter == 'bandit' %}
+                <input type="submit" name="submit" value="Pay">
+            {% elif encounter == 'trader' %}
+                <input type="submit" name = "submit"  value="Ignore">
+            {% endif %}
+        </td>
+    {% if encounter == 'trader' %}
+        <input type="hidden" id="encounter_type" name="encounter_type" value="trader">
+    {% elif encounter == 'bandit' %}
+        <input type="hidden" id="encounter_type" name="encounter_type" value="bandit">
+    {% elif encounter == 'police' %}
+        <input type="hidden" id="encounter_type" name="encounter_type" value="police">
+    {% endif %}
+    </tr>
+    </form>
+</table>
